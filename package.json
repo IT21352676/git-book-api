@@ -1,0 +1,17 @@
+{
+  "name": "git-book-api",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@gitbook/api": "^0.117.0",
+    "axios": "^1.9.0",
+    "node-fetch": "^3.3.2"
+  }
+}
