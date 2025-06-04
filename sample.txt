@@ -1,0 +1,11 @@
+  {
+      id: 't3wE4DXkMgcyBkt0GxxS',
+      title: 'General Settings',
+      kind: 'group',
+      type: 'group',
+      path: 'general-settings',
+      slug: 'general-settings',
+      createdAt: '2022-03-20T04:45:57.000Z',
+      updatedAt: '2022-03-20T04:45:57.000Z',
+      pages: [Array]
+    },
