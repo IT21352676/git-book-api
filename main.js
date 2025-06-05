@@ -6,16 +6,18 @@ const gitbook = new GitBookAPI({
 
 const SPACE_ID = "NhGxX3Ixt1T5VlFUUTc8";
 
-const data = await gitbook.spaces.listPages(SPACE_ID);
+//const data = await gitbook.spaces.listPages(SPACE_ID);
 
 //console.log(data.data);
 
-const pageData = await gitbook.spaces.getPageById(
-  SPACE_ID,
-  "DLSKA2YgYk966czII3JC"
-);
+// const pageData = await gitbook.spaces.getPageById(
+//   SPACE_ID,
+//   "DLSKA2YgYk966czII3JC"
+// );
 
-console.log(pageData.data.document.nodes[0].nodes[0].nodes[0].leaves);
+gitbook.spaces.getDo;
+
+//console.log(pageData.data.document.nodes[0].nodes[0].nodes[0].leaves);
 
 // const printPagesWithContent = async (pages, depth = 0) => {
 //   const indent = "  ".repeat(depth);
@@ -52,13 +54,51 @@ console.log(pageData.data.document.nodes[0].nodes[0].nodes[0].leaves);
 //   }
 // };
 
-// const main = async () => {
-//   try {
-//     const { data } = await gitbook.spaces.listPages(SPACE_ID);
-//     await printPagesWithContent(data.pages);
-//   } catch (err) {
-//     console.error("Top-level error:", err.response?.data || err.message);
-//   }
-// };
+const main = async () => {
+  try {
+    const { data: topLevel } = await gitbook.spaces.listPages(SPACE_ID);
 
-// main();
+    for (const secondLevel of topLevel.pages) {
+      console.log(secondLevel.title);
+
+      if (secondLevel.pages && secondLevel.pages.length > 0) {
+        for (const thirdLevel of secondLevel.pages) {
+          console.log(`      ${thirdLevel.title}`);
+
+          if (thirdLevel.documentId && thirdLevel.type === "document") {
+            try {
+              const { data: content } = await gitbook.spaces.getDocumentById(
+                SPACE_ID,
+                thirdLevel.documentId
+              );
+
+              if (content.nodes && content.nodes.length > 0) {
+                for (const node of content.nodes) {
+                  if (node.nodes && node.nodes.length > 0) {
+                    for (const subNode of node.nodes) {
+                      if (subNode.leaves && subNode.leaves.length > 0) {
+                        for (const leaf of subNode.leaves) {
+                          console.log(`             ${leaf.text}`);
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            } catch (err) {
+              console.error(
+                "Error fetching document:",
+                thirdLevel.title,
+                err.message
+              );
+            }
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Top-level error:", err.response?.data || err.message);
+  }
+};
+
+main();
